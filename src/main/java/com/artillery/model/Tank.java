@@ -61,10 +61,22 @@ public class Tank {
 
         // Draw tank treads
         g2d.setColor(Color.GRAY);
-        g2d.fillRect(x - width / 2, y + height - height / 4, width, height / 4);
+        g2d.fillRect(x - width / 2, y + height * 3 / 4, width, height / 4);
 
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(x - width / 2, y + height - height / 4, width, height / 4);
+        g2d.setStroke(new BasicStroke(
+                1,
+                BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER,
+                10,
+                new float[]{3, 2},
+                0
+                )
+        );
+
+        g2d.drawRect(x - width / 2, y + height * 3 / 4, width, height / 4);
+
+        g2d.setStroke(new BasicStroke(1)); // Reset stroke
     }
 
     public int getX() { return x; }
