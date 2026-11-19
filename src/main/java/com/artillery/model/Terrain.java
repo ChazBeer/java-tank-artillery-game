@@ -20,7 +20,7 @@ public class Terrain {
         return groundLevel;
     }
 
-    // Flat green rectangel for ground
+    // Flat green rectangle for ground
     public void draw (Graphics g) {
         g.setColor(new Color(34, 129, 34));
         g.fillRect(0, groundLevel, width, height - groundLevel);

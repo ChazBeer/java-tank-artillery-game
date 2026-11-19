@@ -50,8 +50,21 @@ public class Tank {
         // Draw static barrel pointing forward
         g2d.setStroke(new BasicStroke(4));
         g2d.setColor(Color.DARK_GRAY);
-        g2d.drawLine(x, y + height / 2, x + 20, y + height / 2);
+        g2d.drawLine(x, y - 5, x + 20, y - 5);
         g2d.setStroke(new BasicStroke(1));
+
+        // Draw tank turret
+        g2d.setColor(color);
+        g2d.fillRect(x - width / 4, y - 10, width / 2, height / 2);
+        g2d.setColor(color.darker());
+        g2d.drawRect(x - width / 4, y - 10, width / 2, height / 2);
+
+        // Draw tank treads
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(x - width / 2, y + height - height / 4, width, height / 4);
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x - width / 2, y + height - height / 4, width, height / 4);
     }
 
     public int getX() { return x; }
