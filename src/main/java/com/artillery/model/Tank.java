@@ -95,8 +95,11 @@ public class Tank {
     }
 
     // */*/*/*/*
-    // Turret rotation
+    // Barrel elevation and firing
     // */*/*/*/*
+
+    private static final double DEFAULT_MUZZLE_SPEED = 11.0;
+
     public void aimUp() {
         angleDegrees = Math.min(MAX_ANGLE, angleDegrees + ANGLE_STEP);
     }
@@ -108,6 +111,22 @@ public class Tank {
     public double getAngleDegrees() {
         return angleDegrees;
     }
+
+    public Projectile fire () {
+
+        double pivotX = x;
+        double pivotY = y - 5;
+        double angleRad = Math.toRadians(angleDegrees);
+
+        double muzzleX = pivotX + BARREL_LENGTH * Math.cos(angleRad);
+        double muzzleY = pivotY - BARREL_LENGTH * Math.sin(angleRad);
+
+        return new Projectile(muzzleX, muzzleY, angleDegrees, DEFAULT_MUZZLE_SPEED);
+    }
+
+    // */*/*/*/*
+    // Getters
+    // */*/*/*/*
 
     public int getX() { return x; }
     public int getY() { return y; }

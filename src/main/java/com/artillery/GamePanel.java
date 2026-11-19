@@ -1,5 +1,6 @@
 package com.artillery;
 
+import com.artillery.model.Projectile;
 import com.artillery.model.Tank;
 import com.artillery.model.Terrain;
 
@@ -17,9 +18,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private static final int TARGET_FPS = 60;
     private static final int DELAY = 1000 / TARGET_FPS;
 
-    private Timer gameTimer;
-    private Terrain terrain;
-    private Tank playerTank;
+    private final Timer gameTimer;
+    private final Terrain terrain;
+    private final Tank playerTank;
+
+    // Projectile variables
+    private Projectile activeProjectile;
+    private boolean fireKeyWasPressed = false;
 
     // Track key states for smooth movement
     private Map<Integer, Boolean> keyStates = new HashMap<>();
@@ -64,6 +69,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         if (keyStates.getOrDefault(KeyEvent.VK_S, false) || keyStates.getOrDefault(KeyEvent.VK_DOWN, false)) {
             playerTank.aimDown();
         }
+
+        // Handle Firing via SPACE
+        boolean spacePressed = keyStates.getOrDefault(KeyEvent.VK_SPACE, false);
+
+        // Only allow new shot when no projectile in existence
+        if (spacePressed && !fireKeyWasPressed && activeProjectile == null) {
+            activeProjectile = playerTank.fire();
+        }
+
+        fireKeyWasPressed = spacePressed;
+
+        if (activeProjectile != null) {
+            activeProjectile.update(terrain, getWidth(), getHeight());
+
+            // Clear ref once impacts ground
+            if (!activeProjectile.isActive()) {
+                activeProjectile = null;
+            }
+        }
+
     }
 
     @Override
@@ -82,6 +107,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         g2D.setColor(Color.black);
         g2D.setFont(new Font("Arial", Font.BOLD, 14));
         g2D.drawString("Use A/D or Left/Right to move", 20, 30);
+
+        // Draw projectile
+        if (activeProjectile != null) {
+            activeProjectile.draw(g2D);
+        }
     }
 
     @Override
