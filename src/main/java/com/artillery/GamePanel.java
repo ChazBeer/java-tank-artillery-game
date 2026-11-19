@@ -49,12 +49,20 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
         int width = getWidth();
 
-        // Handle movement via A/D or Left/RIght
+        // Handle movement via A/D or Left/Right
         if (keyStates.getOrDefault(KeyEvent.VK_A, false) || keyStates.getOrDefault(KeyEvent.VK_LEFT, false)) {
             playerTank.moveLeft(terrain, width);
         }
         if (keyStates.getOrDefault(KeyEvent.VK_D, false) || keyStates.getOrDefault(KeyEvent.VK_RIGHT, false)) {
             playerTank.moveRight(terrain, width);
+        }
+
+        // Handle movement via W/S or Up/Down
+        if (keyStates.getOrDefault(KeyEvent.VK_W, false) || keyStates.getOrDefault(KeyEvent.VK_UP, false)) {
+            playerTank.aimUp();
+        }
+        if (keyStates.getOrDefault(KeyEvent.VK_S, false) || keyStates.getOrDefault(KeyEvent.VK_DOWN, false)) {
+            playerTank.aimDown();
         }
     }
 
