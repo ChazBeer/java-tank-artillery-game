@@ -17,6 +17,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     private static final int TARGET_FPS = 60;
     private static final int DELAY = 1000 / TARGET_FPS;
+    private static final int CRATER_RADIUS = 36;
 
     private final Timer gameTimer;
     private final Terrain terrain;
@@ -44,7 +45,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed (ActionEvent e) {
 
         updateGame();
         repaint();
@@ -85,10 +86,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
             // Clear ref once impacts ground
             if (!activeProjectile.isActive()) {
+                if (activeProjectile.didHitTerrain()) {
+                    int impactX = (int) Math.round(activeProjectile.getX());
+                    terrain.createCrater(impactX, CRATER_RADIUS);
+                    playerTank.updatePosition(terrain);
+                }
                 activeProjectile = null;
             }
         }
-
     }
 
     @Override
@@ -100,7 +105,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Draw world
-        terrain.draw(g2D);;
+        terrain.draw(g2D);
         playerTank.draw(g2D);
 
         // Simple instruction text

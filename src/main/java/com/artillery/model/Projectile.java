@@ -10,6 +10,7 @@ public class Projectile {
     private double vy;
     private int radius = 4;
     private boolean active = true;
+    private boolean hitTerrain = false;
 
     private static final double GRAVITY = 0.25; // pixels/frame^2
 
@@ -35,7 +36,16 @@ public class Projectile {
         y += vy;
 
         int ix = (int) Math.round(x);
-        if (ix < 0 || ix > screenWidth || y > screenHeight || y >= terrain.getHeightAt(ix)) {
+        // Left, right, or bottom bounds, end flight without carving terrain
+        if (ix < 0 || ix > screenWidth || y > screenHeight) {
+            active = false;
+            return;
+        }
+
+        // Ground impact snap to surface, mark terrain hit, and deactivate
+        if (y >= terrain.getHeightAt(ix)) {
+            y = terrain.getHeightAt(ix);
+            hitTerrain = true;
             active = false;
         }
     }
@@ -54,5 +64,17 @@ public class Projectile {
 
     public boolean isActive () {
         return active;
+    }
+
+    public boolean didHitTerrain() {
+        return hitTerrain;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

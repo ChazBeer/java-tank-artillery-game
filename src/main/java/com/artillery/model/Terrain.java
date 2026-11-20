@@ -67,4 +67,27 @@ public class Terrain {
         // Fill polygon
         g.fillPolygon(terrainShape);
     }
+
+    // Creates craters
+    public void createCrater (int centerX, int radius) {
+
+        if (heights == null || heights.length == 0 || radius <= 0) {
+            return;
+        }
+
+        int maxGroundY = height - 25; // Keep solid floor near bottom of panel
+        int startX = Math.max(0, centerX - radius);
+        int endX = Math.min(heights.length - 1, centerX + radius);
+
+        for (int x = startX; x <= endX; x++) {
+            double dx = x - centerX;
+            double insideSquared = (double) radius * radius - dx * dx;
+
+            if (insideSquared > 0) {
+                double carveDepth = Math.sqrt(insideSquared);
+                int newHeight = (int) Math.round(heights[x] + carveDepth);
+                heights[x] = Math.min(maxGroundY, newHeight);
+            }
+        }
+    }
 }
